@@ -3,6 +3,7 @@
 #' \code{scAUCscore} This function evaluates a logistic regression model to predict the state of individual CD8 tumor-infiltrating lymphocytes (mouse or human) based on their transcriptomes (scRNA-seq data)
 #'
 #' @param data single-cell expression matrix. Only gene expression ranks in each cell will be used and therefore any cell-to-cell normalization method used is not relevant (e.g. UMI counts, CPM, TPM, TMM)
+#' @param nCores number of cores to use in parallel calculation of gene rankings
 #'
 #' @export
 #'

@@ -39,12 +39,4 @@ predictTilState <- function(aucs) {
 }
 
 
-#' B16 CD8 Tumor-infiltrating T-cells from Singer et al 2016
-#'
-#' This dataset was used to train the logistic regression model and is provided as an example for testing.
-#' It is a subset (filtered genes and cells) of the Singer M scRNA-seq dataset available at NCBI GEO under accession GSE85947
-#'
-#' @references Singer M, Wang C, Cong L, Marjanovic ND et al. A Distinct Gene Module for Dysfunction Uncoupled from Activation in Tumor-Infiltrating T Cells. Cell 2016 Sep 8;166(6):1500-1511.e9. \url{https://www.ncbi.nlm.nih.gov/pubmed/27610572}
-#' @references \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE85947}
-"B16CD8TILs_tpm"
 
