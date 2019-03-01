@@ -1,0 +1,35 @@
+#' Calculate CD8 TIL states enrichment scores (required to run predictTilState function)
+#'
+#' \code{scAUCscore} This function evaluates a logistic regression model to predict the state of individual CD8 tumor-infiltrating lymphocytes (mouse or human) based on their transcriptomes (scRNA-seq data)
+#'
+#' @param data single-cell expression matrix. Only gene expression ranks in each cell will be used and therefore any cell-to-cell normalization method used is not relevant (e.g. UMI counts, CPM, TPM, TMM)
+#'
+#' @export
+#'
+
+
+#install.packages("BiocManager")
+#install.packages("doParallel")
+#install.packages("doRNG")
+#BiocManager::install("GenomeInfoDbData",type="source")
+#BiocManager::install("AUCell")
+#BiocManager::install("SingleCellExperiment",type="source")
+library(AUCell)
+library(SingleCellExperiment)
+library(doParallel)
+library(doRNG)
+
+
+
+scAUCscore <- function(sce, nCores=1) {
+
+  set.seed(123)
+  cells_rankings <- AUCell_buildRankings(logcounts(sce), nCores=nCores, plotStats=F,verbose = F)
+  cells_AUC <- AUCell_calcAUC(sigs, cells_rankings, aucMaxRank=1500)
+  aucs <- getAUC(cells_AUC)
+  rownames(aucs)[1:12] <- paste0("AUC_PW_DEG_",rownames(cells_AUC)[1:12])
+  return(aucs)
+}
+
+
+
