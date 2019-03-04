@@ -2,14 +2,17 @@
 #'
 #' \code{predictTilState} This function evaluates a logistic regression model to predict the state of individual CD8 tumor-infiltrating lymphocytes (mouse or human) based on their transcriptomes (scRNA-seq data)
 #'
-#' @param aucs matrix of enrichment scores (scAUCscore)
+#' @param x single-cell expression object of class \emph{SingleCellExperiment} (if is.auc is FALSE) or matrix of enrichment scores (output of function scAUCscore, if is.auc is TRUE). For gene expression matrix, only gene expression ranks in each cell will be used and therefore any cell-to-cell normalization method used equivalent (as long as gene ranks are conserved among the top ~5"\%" genes). E.g. UMI counts, CPM, TPM, TMM are equivalent input types. Gene names correspond to mouse gene symbols (e.g. \emph{Cncb2}).
 #'
+#' @param is.auc logical value indicating if input matrix x corresponds to single-cell expression matrix (FALSE, default) or matrix of enrichment scores, as calculated by scAUCscore function (TRUE)
+
 #' @return a two-element list containing 1) \emph{predictedState}, the predicted states
-#' (naive, terminal effector, exhausted, memory-like, cycling effector or "unknown" if no class had a score above a threshold of 0.5), and
-#' 2) \emph{stateProbabilityMatrix}, a matrix of number_of_cells x number_of_states (5) of probabilities of cell c belonging to class s
+#' (naive, effector, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of 0.5),
+#' 2) \emph{stateProbabilityMatrix}, a matrix of number_of_cells x number_of_states (5) of probabilities of cell c belonging to class s,
+#' and 3) \emph{cycling}, logical vector indicating for each cell whethere there is a high cell cycle signal (independent to the cellular sub-type/state signal)
 #'
 #' @examples
-#' data(B16CD8TILs_tpm)
+##' data(B16CD8TILs_tpm)
 #' x <- predictTilState(B16CD8TILs_tpm)
 #' table(x$predictedState)
 #' head(x$stateProbabilityMatrix)
@@ -17,7 +20,22 @@
 #'
 
 
-predictTilState <- function(aucs) {
+predictTilState <- function(data,nCores=1,is.auc=F) {
+
+  if(!is.auc){
+
+    if(class(data)!="SingleCellExperiment") stop("input is not a SingleCellExperiment object")
+
+    if(sum(!sigGenes %in% rownames(data)) > 0) {
+      warning(paste("The following genes were not found ",paste(sigGenes[!sigGenes %in% rownames(data)],collapse=","),". Unknown prediction performance."))
+      if(mean(!sigGenes %in% rownames(data)) > 0.1) stop("Too many genes not found")
+    }
+
+    aucs <- scAUCscore(data,nCores=nCores)
+
+  } else {
+    aucs <- data
+  }
 
   odf = function(x) exp(colSums((aucs[names(x),] * x)))
 
