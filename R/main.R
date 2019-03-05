@@ -1,3 +1,15 @@
+#install.packages("BiocManager")
+#install.packages("doParallel")
+#install.packages("doRNG")
+#BiocManager::install("GenomeInfoDbData",type="source")
+#BiocManager::install("AUCell")
+#BiocManager::install("SingleCellExperiment",type="source")
+library(AUCell)
+library(SingleCellExperiment)
+library(doParallel)
+library(doRNG)
+
+
 glm_coefs <- readRDS("data/coefs.list.rds")
 sigs <- readRDS("data/CD8statesSignatures.rds")
 orthologMap <- readRDS("data/mapHsa_vs_Mmu_Orthologs.rds")
@@ -8,4 +20,4 @@ classNames=names(glm_coefs)
 
 #my_aucs <- readRDS("data/glm.data.rds")
 #my_preds <- readRDS("data/glm.data.pred.rds")
-#sce <- readRDS("data/B16CD8TIL_SCE.rds")
+#sce <- readRDS("../B16CD8TIL_SCE.rds")

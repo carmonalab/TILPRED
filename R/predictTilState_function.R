@@ -58,8 +58,9 @@ predictTilState <- function(data,nCores=1,is.auc=F,human=F) {
   probM.un=probM
   probM.un[probM<0.5]=NA
   cellClass=as.character(apply(probM.un,1,function(x) classNames[which.max(x)]))
-  cellClass[cellClass=="character(0)"]="unknown"
-  cellClass=factor(cellClass,levels=classNames)
+  cellClass[!cellClass %in% classNames]="unknown"
+  cellClass=factor(cellClass,levels=c(classNames,"unknown"))
+  names(cellClass)=rownames(probM)
   return(list(predictedState=cellClass,stateProbabilityMatrix=probM,cycling=aucs["cycling",]>0.2))
 
 }
