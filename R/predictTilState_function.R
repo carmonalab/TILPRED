@@ -8,8 +8,10 @@
 #'
 #' @param human logical value indicating if input matrix correspond to human genes (by default mouse data is expected)
 #'
+#' @param scoreThreshold probability threshold (0 to 1) for assigning cell states. If all state probabilities are below this threshold, 'unknown' state is assigned. Default is 0.5
+#'
 #' @return a two-element list containing 1) \emph{predictedState}, the predicted states
-#' (naive, effector, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of 0.5),
+#' (naive, effector, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of \emph{scoreThreshold}),
 #' 2) \emph{stateProbabilityMatrix}, a matrix of number_of_cells x number_of_states (5) of probabilities of cell c belonging to class s,
 #' and 3) \emph{cycling}, logical vector indicating for each cell whethere there is a high cell cycle signal (independent to the cellular sub-type/state signal)
 #'
@@ -22,11 +24,13 @@
 #'
 
 
-predictTilState <- function(data,nCores=1,is.auc=F,human=F) {
+predictTilState <- function(data,nCores=1,is.auc=F,human=F,scoreThreshold=0.5) {
 
   if(human) {
     sigs <- lapply(sigs,function(x) unique(orthologMap[names(orthologMap) %in% x]))
   }
+
+  if(scoreThreshold < 0 | scoreThreshold > 1) stop("scoreThreshold is invalid (0 to 1)")
 
   sigGenes=unique(unlist(sigs))
 
@@ -56,7 +60,7 @@ predictTilState <- function(data,nCores=1,is.auc=F,human=F) {
   colnames(probM)=classNames
   rownames(probM)=colnames(aucs)
   probM.un=probM
-  probM.un[probM<0.5]=NA
+  probM.un[probM < scoreThreshold]=NA
   cellClass=as.character(apply(probM.un,1,function(x) classNames[which.max(x)]))
   cellClass[!cellClass %in% classNames]="unknown"
   cellClass=factor(cellClass,levels=c(classNames,"unknown"))
