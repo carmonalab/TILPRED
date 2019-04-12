@@ -8,7 +8,7 @@
 
 
 
-scAUCscore <- function(sce, nCores=1) {
+scAUCscore <- function(sce, nCores=1, sigs) {
 
   set.seed(123)
   cells_rankings <- AUCell::AUCell_buildRankings(logcounts(sce), nCores=nCores, plotStats=F,verbose = F)

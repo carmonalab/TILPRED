@@ -43,7 +43,7 @@ predictTilState <- function(data,nCores=1,is.auc=F,human=F,scoreThreshold=0.5) {
       if(mean(!sigGenes %in% rownames(data)) > 0.1) stop("Too many genes not found")
     }
 
-    aucs <- scAUCscore(data,nCores=nCores)
+    aucs <- scAUCscore(data,nCores=nCores, sigs=sigs)
 
   } else {
     aucs <- data
