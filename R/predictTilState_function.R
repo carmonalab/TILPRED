@@ -9,7 +9,7 @@
 #' @param scoreThreshold probability threshold (0 to 1) for assigning cell states. If all state probabilities are below this threshold, 'unknown' state is assigned. Default is 0.5
 #'
 #' @return a two-element list containing 1) \emph{predictedState}, the predicted states
-#' (naive, effector, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of \emph{scoreThreshold}),
+#' (naive, effector memory, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of \emph{scoreThreshold}),
 #' 2) \emph{stateProbabilityMatrix}, a matrix of number_of_cells x number_of_states (4) of probabilities of cell c belonging to class s,
 #' and 3) \emph{cycling}, logical vector indicating for each cell whethere there is a high cell cycle signal (independent to the cellular sub-type/state signal)
 #'

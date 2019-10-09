@@ -4,13 +4,10 @@
 \alias{predictTilState}
 \title{Predict state of tumor-infiltrating CD8 T-cells from single-cell signature enrichment scores}
 \usage{
-predictTilState(data, nCores = 1, is.auc = F, human = F,
-  scoreThreshold = 0.5)
+predictTilState(data, nCores = 1, human = F, scoreThreshold = 0.5)
 }
 \arguments{
-\item{data}{single-cell expression object of class \emph{SingleCellExperiment} (if is.auc is FALSE) or matrix of enrichment scores (output of function scAUCscore, if is.auc is TRUE). For gene expression matrix, only gene expression ranks in each cell will be used and therefore any cell-to-cell normalization method used equivalent (as long as gene ranks are conserved among the top ~5"\%" genes). E.g. UMI counts, CPM, TPM, TMM are equivalent input types. Gene names correspond to mouse gene symbols (e.g. \emph{Cncb2}).}
-
-\item{is.auc}{logical value indicating if input matrix \emph{data} corresponds to single-cell expression matrix (FALSE, default) or matrix of enrichment scores, as calculated by scAUCscore function (TRUE)}
+\item{data}{single-cell expression object of CD8 T-cells of class \emph{SingleCellExperiment}. For gene expression matrix, only gene expression ranks in each cell will be used and therefore any cell-to-cell normalization method used equivalent (as long as gene ranks are conserved among the top ~5"\%" genes). E.g. UMI counts, CPM, TPM, TMM are equivalent input types. Gene names correspond to mouse gene symbols (e.g. \emph{Cncb2}).}
 
 \item{human}{logical value indicating if input matrix correspond to human genes (by default mouse data is expected)}
 
@@ -18,8 +15,8 @@ predictTilState(data, nCores = 1, is.auc = F, human = F,
 }
 \value{
 a two-element list containing 1) \emph{predictedState}, the predicted states
-(naive, effector, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of \emph{scoreThreshold}),
-2) \emph{stateProbabilityMatrix}, a matrix of number_of_cells x number_of_states (5) of probabilities of cell c belonging to class s,
+(naive, effector memory, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of \emph{scoreThreshold}),
+2) \emph{stateProbabilityMatrix}, a matrix of number_of_cells x number_of_states (4) of probabilities of cell c belonging to class s,
 and 3) \emph{cycling}, logical vector indicating for each cell whethere there is a high cell cycle signal (independent to the cellular sub-type/state signal)
 }
 \description{
