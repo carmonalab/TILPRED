@@ -6,7 +6,11 @@
 #'
 #' @param human logical value indicating if input matrix correspond to human genes (by default mouse data is expected)
 #'
-#' @param scoreThreshold probability threshold (0 to 1) for assigning cell states. If all state probabilities are below this threshold, 'unknown' state is assigned. Default is 0.5
+#' @param scoreThreshold probability threshold [0,1] for assigning cell states. If all state probabilities are below this threshold, 'unknown' state is assigned. Default 0.5
+#'
+#' @param cellCycleThreshold probability threshold [0,1] for assigning cell cyling state; Values in the range [0.1,0.2] are recommended (Default 0.2)
+#'
+#' @param nCores number of cores used for (AUCell) AUC scores computation (Default 1)
 #'
 #' @return a two-element list containing 1) \emph{predictedState}, the predicted states
 #' (naive, effector memory, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of \emph{scoreThreshold}),
@@ -23,20 +27,21 @@
 #'
 
 
-predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5) {
+predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleThreshold=0.2) {
 
   if(human) {
     sigs <- lapply(sigs,function(x) unique(orthologMap[names(orthologMap) %in% x]))
   }
 
   if(scoreThreshold < 0 | scoreThreshold > 1) stop("scoreThreshold is invalid (0 to 1)")
+  if(cellCycleThreshold < 0 | cellCycleThreshold > 1) stop("cellCycleThreshold is invalid (0 to 1)")
 
   sigGenes=unique(unlist(sigs))
 
     if(class(data)!="SingleCellExperiment") stop("input is not a SingleCellExperiment object")
 
     if(sum(!sigGenes %in% rownames(data)) > 0) {
-      warning(paste("The following genes were not found ",paste(sigGenes[!sigGenes %in% rownames(data)],collapse=","),". Unknown prediction performance."))
+      warning(paste("The following genes were not found in the dataset provided ",paste(sigGenes[!sigGenes %in% rownames(data)],collapse=","),". Prediction performance might be affected."))
       if(mean(!sigGenes %in% rownames(data)) > 0.1) stop("Too many genes not found")
     }
 
@@ -59,7 +64,7 @@ predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5) {
   cellClass[!cellClass %in% classNames]="unknown"
   cellClass=factor(cellClass,levels=c(classNames,"unknown"))
   names(cellClass)=rownames(probM)
-  return(list(predictedState=cellClass,stateProbabilityMatrix=probM,cycling=aucs["cycling",]>0.2))
+  return(list(predictedState=cellClass,stateProbabilityMatrix=probM,cycling=aucs["cycling",]>cellCycleThreshold))
 
 }
 

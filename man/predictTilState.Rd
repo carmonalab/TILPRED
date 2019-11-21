@@ -4,14 +4,19 @@
 \alias{predictTilState}
 \title{Predict state of tumor-infiltrating CD8 T-cells from single-cell signature enrichment scores}
 \usage{
-predictTilState(data, nCores = 1, human = F, scoreThreshold = 0.5)
+predictTilState(data, nCores = 1, human = F, scoreThreshold = 0.5,
+  cellCycleThreshold = 0.2)
 }
 \arguments{
 \item{data}{single-cell expression object of CD8 T-cells of class \emph{SingleCellExperiment}. For gene expression matrix, only gene expression ranks in each cell will be used and therefore any cell-to-cell normalization method used equivalent (as long as gene ranks are conserved among the top ~5"\%" genes). E.g. UMI counts, CPM, TPM, TMM are equivalent input types. Gene names correspond to mouse gene symbols (e.g. \emph{Cncb2}).}
 
+\item{nCores}{number of cores used for (AUCell) AUC scores computation (Default 1)}
+
 \item{human}{logical value indicating if input matrix correspond to human genes (by default mouse data is expected)}
 
-\item{scoreThreshold}{probability threshold (0 to 1) for assigning cell states. If all state probabilities are below this threshold, 'unknown' state is assigned. Default is 0.5}
+\item{scoreThreshold}{probability threshold [0,1] for assigning cell states. If all state probabilities are below this threshold, 'unknown' state is assigned. Default 0.5}
+
+\item{cellCycleThreshold}{probability threshold [0,1] for assigning cell cyling state; Values in the range [0.1,0.2] are recommended (Default 0.2)}
 }
 \value{
 a two-element list containing 1) \emph{predictedState}, the predicted states
