@@ -41,7 +41,7 @@ predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleTh
     if(class(data)!="SingleCellExperiment") stop("input is not a SingleCellExperiment object")
 
     if(sum(!sigGenes %in% rownames(data)) > 0) {
-      warning(paste("The following genes were not found in the dataset provided ",paste(sigGenes[!sigGenes %in% rownames(data)],collapse=","),". Prediction performance might be affected."))
+      warning(paste("The following genes were not found in the dataset provided ",paste(sigGenes[!sigGenes %in% rownames(data)],collapse=","),". Doesn't look too bad but prediction performance might be affected."))
       if(mean(!sigGenes %in% rownames(data)) > 0.1) stop("Too many genes not found")
     }
 
