@@ -29,12 +29,39 @@
 
 predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleThreshold=0.2) {
 
-  if(human) {
-    sigs <- lapply(sigs,function(x) unique(orthologMap[names(orthologMap) %in% x]))
-  }
-
   if(scoreThreshold < 0 | scoreThreshold > 1) stop("scoreThreshold is invalid (0 to 1)")
   if(cellCycleThreshold < 0 | cellCycleThreshold > 1) stop("cellCycleThreshold is invalid (0 to 1)")
+  if(class(data)!="SingleCellExperiment") stop("input is not a SingleCellExperiment object")
+
+
+  if(human) {
+    #sigs <- lapply(sigs,function(x) unique(orthologMap[names(orthologMap) %in% x]))
+
+    sigGenes=unique(unlist(cellTypeHumanSigs))
+
+    if(sum(!sigGenes %in% rownames(data)) > 0) {
+      warning(paste("The following genes were not found in the dataset provided ",paste(sigGenes[!sigGenes %in% rownames(data)],collapse=","),". Doesn't look too bad but prediction performance might be affected."))
+      if(mean(!sigGenes %in% rownames(data)) > 0.1) stop("Too many genes not found")
+    }
+
+    aucs <- scAUCscore(data,nCores=nCores, sigs=cellTypeHumanSigs)
+    rownames(aucs) <- paste0("AUC_",rownames(aucs))
+
+    myCellType.AUC <- rep("nonTcell",ncol(aucs))
+    myCellType.AUC[aucs["AUC_Tcell",]>0.1] <- "pureTcell"
+    myCellType.AUC[aucs["AUC_Tcell",]>0.1 & (aucs["AUC_B.cell",] > 0.15 | aucs["AUC_CAF",] > 0.05 | aucs["AUC_Endo.",] > 0.1 |aucs["AUC_Macrophage",] > 0.15 | aucs["AUC_Mal",] > 0.15) ] <- "TcellDoublet"
+    myCellType.AUC[aucs["AUC_NK",] > 0.2] <- "NK"
+
+    #aucCells <- aucs[,grep("AUC_",colnames(aucs))]
+    aucsMax <- (apply(aucs,2,function(x) x[which.max(x)]))
+    aucsLabel <- (sub("AUC_","",apply(aucs,2,function(x) rownames(aucs)[which.max(x)])))
+    myCellType.AUC[aucs["AUC_Tcell",] <= 0.1 & aucsMax > 0.1] <- aucsLabel[aucs["AUC_Tcell",] <= 0.1 & aucsMax > 0.1]
+    return(list(predictedState=myCellType.AUC,stateProbabilityMatrix=NA,cycling=NA))
+
+
+
+  } else {
+
 
   sigGenes=unique(unlist(sigs))
 
@@ -46,6 +73,7 @@ predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleTh
     }
 
     aucs <- scAUCscore(data,nCores=nCores, sigs=sigs)
+    rownames(aucs)[1:12] <- paste0("AUC_PW_DEG_",rownames(aucs)[1:12])
 
 
   odf = function(x) exp(colSums((aucs[names(x),] * x)))
@@ -65,6 +93,7 @@ predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleTh
   cellClass=factor(cellClass,levels=c(classNames,"unknown"))
   names(cellClass)=rownames(probM)
   return(list(predictedState=cellClass,stateProbabilityMatrix=probM,cycling=aucs["cycling",]>cellCycleThreshold))
+  }
 
 }
 

@@ -12,6 +12,7 @@ library(doRNG)
 
 glm_coefs <- readRDS("data/coefs.list.rds")
 sigs <- readRDS("data/CD8statesSignatures.rds")
+cellTypeHumanSigs <- readRDS("data/cellTypeSignatures_human.Rds")
 orthologMap <- readRDS("data/mapHsa_vs_Mmu_Orthologs.rds")
 
 
