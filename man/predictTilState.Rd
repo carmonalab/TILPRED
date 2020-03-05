@@ -27,7 +27,7 @@ predictTilState(
 a two-element list containing 1) \emph{predictedState}, the predicted states
 (naive, effector memory, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of \emph{scoreThreshold}),
 2) \emph{stateProbabilityMatrix}, a matrix of number_of_cells x number_of_states (4) of probabilities of cell c belonging to class s,
-and 3) \emph{cycling}, logical vector indicating for each cell whethere there is a high cell cycle signal (independent to the cellular sub-type/state signal)
+ 3) \emph{cycling}, logical vector indicating for each cell whethere there is a high cell cycle signal (independent to the cellular sub-type/state signal), and 4) \emph{cyclingScore} AUC score for the cell cycle signature
 }
 \description{
 \code{predictTilState} This function evaluates a logistic regression model to predict the state of individual CD8 tumor-infiltrating lymphocytes (mouse or human) based on their transcriptomes (scRNA-seq data)

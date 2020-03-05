@@ -4,7 +4,7 @@
 \alias{scAUCscore}
 \title{Calculate CD8 TIL states enrichment scores (required to run predictTilState function)}
 \usage{
-scAUCscore(sce, nCores = 1, sigs)
+scAUCscore(sce, nCores = 1, sigs, aucMaxRank = 1500)
 }
 \arguments{
 \item{nCores}{number of cores to use in parallel calculation of gene rankings}
