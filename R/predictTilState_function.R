@@ -12,22 +12,26 @@
 #'
 #' @param nCores number of cores used for (AUCell) AUC scores computation (Default 1)
 #'
-#' @return a two-element list containing 1) \emph{predictedState}, the predicted states
-#' (naive, effector memory, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of \emph{scoreThreshold}),
-#' 2) \emph{stateProbabilityMatrix}, a matrix of number_of_cells x number_of_states (4) of probabilities of cell c belonging to class s,
+#' @param filterCD8T automatic pre-filter CD8 T cells before classifing CD8 T cell states (Default TRUE). If filterCD8T is set to FALSE, all input cells are assumed to be CD8 T cells, even though they migh show no features of this cell type.
+#'
+#'
+#' @return a two-element list containing 1) \emph{predictedState}, the predicted states for CD8 T cells
+#' (naive, effector memory, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of \emph{scoreThreshold}); or the predicted cell type for non CD8 T cells: Treg (Foxp3 Regulatory T cells), CD4T (non Treg CD4+ T cells), NKT (NK T cells), Tcell_unknown (T cells of other kinds) and Non-Tcell (for cell types other than T cells, e.g. Myeloid, B cells, NKs);
+#' 2) \emph{stateProbabilityMatrix}, a matrix of number_of_cells x number_of_states (4) of probabilities of cell c belonging to class s, only for CD8 T cells;
 #'  3) \emph{cycling}, logical vector indicating for each cell whethere there is a high cell cycle signal (independent to the cellular sub-type/state signal), and 4) \emph{cyclingScore} AUC score for the cell cycle signature
 #'
 #'
 #' @examples
 #' data(B16CD8TIL_SCE)
-#' x <- predictTilState(B16CD8TIL_SCE)
+#' x <- predictTilState(data=B16CD8TIL_SCE)
 #' table(x$predictedState)
 #' head(x$stateProbabilityMatrix)
+#' head(x$cyclingScore)
 #' @export
 #'
 
 
-predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleThreshold=0.2) {
+predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleThreshold=0.2,filterCD8T=T) {
 
   if(scoreThreshold < 0 | scoreThreshold > 1) stop("scoreThreshold is invalid (0 to 1)")
   if(cellCycleThreshold < 0 | cellCycleThreshold > 1) stop("cellCycleThreshold is invalid (0 to 1)")
@@ -83,9 +87,14 @@ predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleTh
     celltype.pred[aucs["Tcell",]>0.1 & aucs["NK",]>0.3] <- "NKT"
     celltype.pred[apply(aucs[c("Myel","B","NK"),],2,max)>0.2] <- "Non-Tcell"
 
-    print(table(celltype.pred, exclude = NULL))
 
-    aucsCD8T <- aucs[,celltype.pred == "CD8T"]
+    if(filterCD8T){
+      print(table(celltype.pred, exclude = NULL))
+      aucsCD8T <- aucs[,celltype.pred == "CD8T"]
+    } else {
+      aucsCD8T <- aucs
+    }
+
     rownames(aucsCD8T)[1:12] <- paste0("AUC_PW_DEG_",rownames(aucsCD8T)[1:12])
 
 

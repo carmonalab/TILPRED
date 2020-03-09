@@ -9,7 +9,8 @@ predictTilState(
   nCores = 1,
   human = F,
   scoreThreshold = 0.5,
-  cellCycleThreshold = 0.2
+  cellCycleThreshold = 0.2,
+  filterCD8T = T
 )
 }
 \arguments{
@@ -22,11 +23,13 @@ predictTilState(
 \item{scoreThreshold}{probability threshold [0,1] for assigning cell states. If all state probabilities are below this threshold, 'unknown' state is assigned. Default 0.5}
 
 \item{cellCycleThreshold}{probability threshold [0,1] for assigning cell cyling state; Values in the range [0.1,0.2] are recommended (Default 0.2)}
+
+\item{filterCD8T}{automatic pre-filter CD8 T cells before classifing CD8 T cell states (Default TRUE). If filterCD8T is set to FALSE, all input cells are assumed to be CD8 T cells, even though they migh show no features of this cell type.}
 }
 \value{
-a two-element list containing 1) \emph{predictedState}, the predicted states
-(naive, effector memory, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of \emph{scoreThreshold}),
-2) \emph{stateProbabilityMatrix}, a matrix of number_of_cells x number_of_states (4) of probabilities of cell c belonging to class s,
+a two-element list containing 1) \emph{predictedState}, the predicted states for CD8 T cells
+(naive, effector memory, exhausted, memoryLike, or "unknown" if no class had a score above a threshold of \emph{scoreThreshold}); or the predicted cell type for non CD8 T cells: Treg (Foxp3 Regulatory T cells), CD4T (non Treg CD4+ T cells), NKT (NK T cells), Tcell_unknown (T cells of other kinds) and Non-Tcell (for cell types other than T cells, e.g. Myeloid, B cells, NKs);
+2) \emph{stateProbabilityMatrix}, a matrix of number_of_cells x number_of_states (4) of probabilities of cell c belonging to class s, only for CD8 T cells;
  3) \emph{cycling}, logical vector indicating for each cell whethere there is a high cell cycle signal (independent to the cellular sub-type/state signal), and 4) \emph{cyclingScore} AUC score for the cell cycle signature
 }
 \description{
@@ -34,7 +37,8 @@ a two-element list containing 1) \emph{predictedState}, the predicted states
 }
 \examples{
 data(B16CD8TIL_SCE)
-x <- predictTilState(B16CD8TIL_SCE)
+x <- predictTilState(data=B16CD8TIL_SCE)
 table(x$predictedState)
 head(x$stateProbabilityMatrix)
+head(x$cyclingScore)
 }
