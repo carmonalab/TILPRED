@@ -10,4 +10,4 @@ Encoding: UTF-8
 LazyData: true
 Suggests: testthat, doParallel,doRNG
 Imports: GenomeInfoDbData,AUCell,BiocManager,SingleCellExperiment
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
