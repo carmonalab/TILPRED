@@ -8,13 +8,12 @@
 
 
 
-scAUCscore <- function(sce, nCores=1, sigs) {
+scAUCscore <- function(sce, nCores=1, sigs,  aucMaxRank=1500) {
 
   set.seed(123)
   cells_rankings <- AUCell::AUCell_buildRankings(logcounts(sce), nCores=nCores, plotStats=F,verbose = F)
-  cells_AUC <- AUCell::AUCell_calcAUC(sigs, cells_rankings, aucMaxRank=1500)
+  cells_AUC <- AUCell::AUCell_calcAUC(sigs, cells_rankings, aucMaxRank=aucMaxRank)
   aucs <- AUCell::getAUC(cells_AUC)
-  rownames(aucs)[1:12] <- paste0("AUC_PW_DEG_",rownames(cells_AUC)[1:12])
   return(aucs)
 }
 

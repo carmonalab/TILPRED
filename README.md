@@ -1,17 +1,21 @@
 # TILPRED: Tumor-Infiltrating CD8+ Lymphocytes states Predictor
 
-TILPRED is an R Package for the classification of tumor-infiltrating CD8+ lymphocytes (TILs) from single-cell RNA-seq data.
+TILPRED is an R Package for the classification of tumor-infiltrating T lymphocytes (TILs) from single-cell RNA-seq data.
 
-`TILPRED` is a logistic regression-based classifier that reads a [SingleCellExperiment](https://doi.org/doi:10.18129/B9.bioc.SingleCellExperiment) object containing (any number of) CD8 T cell profiles and assigns to each cell a probability score of belonging to any of the following reference CD8 TIL transcriptomic states: 
+NB: Currenlty TILPRED only classifies TILs from mouse. Human functionality is under development. Currently, TILPRED (using parameter human=T) will clasify human cell types from tumor samples, identify pure T cells, contaminated T cells (mostly cell doublets) and other cell types (NK, macrophages, CAF, epithelian, endothelial, malignant cells, etc.)
 
-* _Exhausted_: a.k.a terminally exhausted cells, associated with terminal differentiation in the context of sustained antigenic stimulation. Phenotypically characterized by co-expression of inhibitory receptors PD-1(_Pdcd1_), TIM3(_Havcr2_), CD39(_Entpd1_), cytotoxic molecules (e.g. Gzmb) and lack of Tcf1 (_Tcf7_) expression
+
+`TILPRED` is a logistic regression-based classifier that reads a [SingleCellExperiment](https://doi.org/doi:10.18129/B9.bioc.SingleCellExperiment) object containing CD8 T cell profiles and assigns to each cell a probability score of belonging to any of the following reference CD8 TIL transcriptomic states: 
+
+* _Exhausted_: a.k.a terminally exhausted cells, associated with terminal differentiation in the context of sustained antigenic stimulation. Phenotypically characterized by co-expression of inhibitory receptors PD-1(_Pdcd1_), TIM3(_Havcr2_), CD39(_Entpd1_), cytotoxic molecules (e.g. _Gzmb_) and lack of Tcf1 (_Tcf7_) expression
 * _MemoryLike_: a.k.a progenitor exhausted cells, also associated to sustained antigenic stimulation but retain capacity to self-renew and give rise to _exhausted_ cells. Phenotypically characterized by co-expression of PD-1 (_Pdcd1_) and Tcf1 (_Tcf7_)
-* _EffectorMemory_: antigen experienced T cells with effector memory features (e.g. co-expression of cytotoxicity genes such as Gzmk and Gzmb, and memory genes such as Tcf7, Lef1, Il7r and Ly6c2). These cells have low to intermediate expression of PD-1, and resemble CD8 T cells found upon acute infection (i.e. in the absence of sustained antigenic stimulation)
-* _Naive_: Naive-like CD8 T cells (high expression of Tcf7, Lef1, Il7r, no expression of cytotoxicity genes or T cell activation markers such as CD44, CD69, etc.)
+* _EffectorMemory_: antigen experienced T cells with effector memory features (e.g. co-expression of cytotoxicity genes such as _Gzmk_ and _Gzmb_, and memory genes such as _Tcf7_, _Lef1_, _Il7r_ and _Ly6c2_). These cells have low to intermediate expression of PD-1, and resemble CD8 T cells found upon acute infection (i.e. in the absence of sustained antigenic stimulation)
+* _Naive_: Naive-like CD8 T cells (high expression of _Tcf7_, _Lef1_, _Il7r_, no expression of cytotoxicity genes or T cell activation markers such as CD44, CD69, etc.)
 
-In addition, it predicts proliferation/cycling in each cell, independently of the CD8 TIL subtype. It was trained to classify CD8 TILs from mouse, and therefore its use with human CD8 TILs via ortholog mapping is only experimental (`TILPRED` will automatically map relevant orthologous genes between the two species).
+In addition, it predicts proliferation/cycling in each cell, independently of the CD8 TIL subtype.  `TILPRED` uses gene rankings only and therefore is robust to different data normalization strategies. It was tested with scRNA-seq data produced with plate-based (smart-seq2) and droplet-based (10X 5' and 3' counting) technologies. 
 
-`TILPRED` uses gene rankings only and therefore is robust to different data normalization strategies. It was tested with scRNA-seq data produced with plate-based (smart-seq2) and droplet-based (10X 5' and 3' counting) technologies. 
+Before computing CD8 T cell states probabilites, `TILPRED` will automatic detect non CD8 T cell types. Non CD8 T cells are classified based on curated gene signature enrichment into: _Treg_ (_Foxp3_ Regulatory T cells), _CD4T_ (non Treg CD4+ T cells), _NKT_ (NK T cells), _Tcell_unknown_ (T cells of other kinds) and _Non-Tcell_ (for cell types other than T cells, e.g. Myeloid, B cells, NKs)
+
 
  
 Details on the reference CD8 TIL transcriptomic states and TILPRED construction and benchmarking are available in [Carmona SJ et al BioRXiv](https://doi.org/10.1101/800847)
@@ -24,25 +28,26 @@ TILPRED requires [doParallel](https://cran.r-project.org/web/packages/doParallel
 
 ```
 install.packages(c("doParallel","doRNG"))
-install.packages("BiocManager")
-library(BiocManager)
-BiocManager::install("AUCell")
-BiocManager::install("SingleCellExperiment")
+if (!requireNamespace("BiocManager")) install.packages("BiocManager")
+BiocManager::install(c("AUCell","SingleCellExperiment"))
+library("SingleCellExperiment")
+library("AUCell")
 ```
 
-To install TILPRED directly from the GitHub Repo use [devtools](https://cran.r-project.org/web/packages/devtools/index.html)
+To install TILPRED directly from the Git Repo use [remotes](https://cran.r-project.org/web/packages/remotes/index.html)
 
 ```
-install.packages("devtools")
-library(devtools)
-install_github("carmonalab/TILPRED")
+if (!requireNamespace("remotes")) install.packages("remotes")
+remotes::install_github("carmonalab/TILPRED")
+library(TILPRED)
 ```
 
 ### Package usage
 
-Run TILPRED on a SingleCellExperiment object containing the single-cell expression matrix of CD8 T cells (Automatic cell type detection coming soon, meanwhile make sure to remove non CD8 T cells from your matrix) 
+Run TILPRED on a SingleCellExperiment object containing the single-cell expression matrix of CD8 T cells 
 ```
-sce.pred <- predictTilState(sce)
+data(B16CD8TIL_SCE) # example SingleCellExperiment object
+sce.pred <- predictTilState(data=B16CD8TIL_SCE)
 ```
 
 View output
