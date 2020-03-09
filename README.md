@@ -30,6 +30,8 @@ TILPRED requires [doParallel](https://cran.r-project.org/web/packages/doParallel
 install.packages(c("doParallel","doRNG"))
 if (!requireNamespace("BiocManager")) install.packages("BiocManager")
 BiocManager::install(c("AUCell","SingleCellExperiment"))
+library("SingleCellExperiment")
+library("AUCell")
 ```
 
 To install TILPRED directly from the Git Repo use [remotes](https://cran.r-project.org/web/packages/remotes/index.html)
@@ -37,6 +39,7 @@ To install TILPRED directly from the Git Repo use [remotes](https://cran.r-proje
 ```
 if (!requireNamespace("remotes")) install.packages("remotes")
 remotes::install_git("https://gitlab.unil.ch/carmona/TILPRED.git")
+library(TILPRED)
 ```
 
 ### Package usage
