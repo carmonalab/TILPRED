@@ -1,9 +1,6 @@
-# TILPRED: Tumor-Infiltrating CD8+ Lymphocytes states Predictor
+# `TILPRED`: Tumor-Infiltrating CD8+ Lymphocytes states Predictor
 
 TILPRED is an R Package for the classification of tumor-infiltrating T lymphocytes (TILs) from single-cell RNA-seq data.
-
-NB: Currenlty TILPRED only classifies TILs from mouse. Human functionality is under development. Currently, TILPRED (using parameter human=T) will clasify human cell types from tumor samples, identify pure T cells, contaminated T cells (mostly cell doublets) and other cell types (NK, macrophages, CAF, epithelian, endothelial, malignant cells, etc.)
-
 
 `TILPRED` is a logistic regression-based classifier that reads a [SingleCellExperiment](https://doi.org/doi:10.18129/B9.bioc.SingleCellExperiment) object containing CD8 T cell profiles and assigns to each cell a probability score of belonging to any of the following reference CD8 TIL transcriptomic states: 
 
@@ -17,8 +14,9 @@ In addition, it predicts proliferation/cycling in each cell, independently of th
 Before computing CD8 T cell states probabilites, `TILPRED` will automatic detect non CD8 T cell types. Non CD8 T cells are classified based on curated gene signature enrichment into: _Treg_ (_Foxp3_ Regulatory T cells), _CD4T_ (non Treg CD4+ T cells), _NKT_ (NK T cells), _Tcell_unknown_ (T cells of other kinds) and _Non-Tcell_ (for cell types other than T cells, e.g. Myeloid, B cells, NKs)
 
 
- 
 Details on the reference CD8 TIL transcriptomic states and TILPRED construction and benchmarking are available in [Carmona SJ et al BioRXiv](https://doi.org/10.1101/800847)
+
+NB: Currenlty TILPRED only classifies TILs from mouse. Human functionality is under development. Currently, TILPRED (using parameter human=T) will clasify human cell types from tumor samples, identify pure T cells, contaminated T cells (mostly cell doublets) and other cell types (NK, macrophages, CAF, epithelian, endothelial, malignant cells, etc.)
 
 
 ### Package Installation
