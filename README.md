@@ -14,7 +14,7 @@ In addition, it predicts proliferation/cycling in each cell, independently of th
 Before computing CD8 T cell states probabilites, `TILPRED` will automatically detect non CD8 T cell types. Non CD8 T cells are classified based on curated gene signature enrichment into: _Treg_ (_Foxp3_ Regulatory T cells), _CD4T_ (non Treg CD4+ T cells), _NKT_ (NK T cells), _Tcell_unknown_ (T cells of other kinds) and _Non-Tcell_ (for cell types other than T cells, e.g. Myeloid, B cells, NKs)
 
 
-Details on the reference CD8 TIL transcriptomic states and TILPRED construction and benchmarking are available in [Carmona SJ et al BioRXiv](https://doi.org/10.1101/800847)
+Details on the reference CD8 TIL transcriptomic states and TILPRED construction and benchmarking are available in [Carmona SJ et al. 2020](https://doi.org/10.1080/2162402X.2020.1737369)
 
 NB: Currently, TILPRED classifies CD8 TILs from mouse only. Human functionality is under development. TILPRED using parameter human=T will only classify human cell types from tumor samples into: pure T cells, contaminated T cells, NKs and other cell types (NK, macrophages, CAF, epithelial, endothelial, malignant cells, etc.)
 
@@ -54,4 +54,8 @@ table(sce.pred$predictedState)
 head(sce.pred$stateProbabilityMatrix)
 ```
 
-For a running example please see this [R Notebook](https://github.com/carmonalab/testTILPRED)
+### For a running example please see this [R Notebook](https://github.com/carmonalab/testTILPRED)
+
+
+### To cite TILPRED 
+Santiago J. Carmona, Imran Siddiqui, Mariia Bilous, Werner Held & David Gfeller (2020) Deciphering the transcriptomic landscape of tumor-infiltrating CD8 lymphocytes in B16 melanoma tumors with single-cell RNA-Seq, OncoImmunology, 9:1, DOI: [10.1080/2162402X.2020.1737369](https://doi.org/10.1080/2162402X.2020.1737369)
