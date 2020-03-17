@@ -1,13 +1,13 @@
 Package: TILPRED
 Type: Package
 Title: Tumor-infiltrating CD8+ T-cell state predictor for scRNA-seq data
-Version: 1.0.0
+Version: 1.0.1
 Author: Santiago J. Carmona
 Maintainer: Santiago J. Carmona <sjcarmona@gmail.com>
 Description: Classifies tumor-infiltrating CD8 lymphocytes (TILs) subtypes from scRNA-seq data
 License: GPL (version 2 or later)
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat, doParallel,doRNG
-Imports: GenomeInfoDbData,AUCell,BiocManager,SingleCellExperiment
+Suggests: testthat
+Imports: GenomeInfoDbData,AUCell,BiocManager,SingleCellExperiment,doParallel,doRNG
 RoxygenNote: 7.0.2

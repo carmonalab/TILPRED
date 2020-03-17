@@ -50,6 +50,13 @@ predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleTh
     aucs <- scAUCscore(data,nCores=nCores, sigs=cellTypeHumanSigs, aucMaxRank=1500)
     rownames(aucs) <- paste0("AUC_",rownames(aucs))
 
+    missingAucs <- c("AUC_Tcell","AUC_B.cell","AUC_CAF","AUC_Endo.","AUC_Macrophage","AUC_Mal","AUC_NK")[!c("AUC_Tcell","AUC_B.cell","AUC_CAF","AUC_Endo.","AUC_Macrophage","AUC_Mal","AUC_NK") %in% rownames(aucs)]
+
+    for (mA in missingAucs){
+      aucs <- rbind(aucs,rep(0,ncol(aucs)))
+      rownames(aucs)[nrow(aucs)]<- mA
+    }
+
     celltype.pred <- rep("nonTcell",ncol(aucs))
     celltype.pred[aucs["AUC_Tcell",]>0.1] <- "pureTcell"
     celltype.pred[aucs["AUC_Tcell",]>0.1 & (aucs["AUC_B.cell",] > 0.15 | aucs["AUC_CAF",] > 0.05 | aucs["AUC_Endo.",] > 0.1 |aucs["AUC_Macrophage",] > 0.15 | aucs["AUC_Mal",] > 0.15) ] <- "TcellDoublet"
@@ -76,7 +83,15 @@ predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleTh
       if(mean(!sigGenes %in% rownames(data)) > 0.1) stop("Too many genes not found")
     }
 
+
     aucs <- scAUCscore(data,nCores=nCores, sigs=sigs)
+
+
+    missingAucs <- c("Tcell","CD8T","Cd4","Treg","Myel","B","NK")[!c("Tcell","CD8T","Cd4","Treg","Myel","B","NK") %in% rownames(aucs)]
+    for (mA in missingAucs){
+      aucs <- rbind(aucs,rep(0,ncol(aucs)))
+      rownames(aucs)[nrow(aucs)]<- mA
+    }
 
     celltype.pred <- rep("unknown",ncol(aucs))
     names(celltype.pred) <- colnames(aucs)

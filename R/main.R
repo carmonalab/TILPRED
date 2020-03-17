@@ -4,10 +4,10 @@
 #BiocManager::install("GenomeInfoDbData",type="source")
 #BiocManager::install("AUCell")
 #BiocManager::install("SingleCellExperiment",type="source")
-library(AUCell)
-library(SingleCellExperiment)
-library(doParallel)
-library(doRNG)
+#library(AUCell)
+#library(SingleCellExperiment)
+#library(doParallel)
+#library(doRNG)
 
 
 glm_coefs <- readRDS("data/coefs.list.rds")
