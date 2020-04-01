@@ -11,7 +11,7 @@
 scAUCscore <- function(sce, nCores=1, sigs,  aucMaxRank=1500) {
 
   set.seed(123)
-  cells_rankings <- AUCell::AUCell_buildRankings(logcounts(sce), nCores=nCores, plotStats=F,verbose = F)
+  cells_rankings <- AUCell::AUCell_buildRankings(SingleCellExperiment::logcounts(sce), nCores=nCores, plotStats=F,verbose = F)
   cells_AUC <- AUCell::AUCell_calcAUC(sigs, cells_rankings, aucMaxRank=aucMaxRank)
   aucs <- AUCell::getAUC(cells_AUC)
   return(aucs)
