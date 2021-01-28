@@ -42,9 +42,10 @@ predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleTh
 
     sigGenes=unique(unlist(cellTypeHumanSigs))
 
-    if(sum(!sigGenes %in% rownames(data)) > 0) {
+    if(sum(!sigGenes %in% rownames(data)) > 10) {
+      if(mean(!sigGenes %in% rownames(data)) > 0.75) stop("Too many genes not found")
       warning(paste("The following genes were not found in the dataset provided ",paste(sigGenes[!sigGenes %in% rownames(data)],collapse=","),". Doesn't look too bad but prediction performance might be affected."))
-      if(mean(!sigGenes %in% rownames(data)) > 0.1) stop("Too many genes not found")
+      
     }
 
     aucs <- scAUCscore(data,nCores=nCores, sigs=cellTypeHumanSigs, aucMaxRank=1500)
@@ -72,7 +73,7 @@ predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleTh
   } else {
 
 
-    if(mean(sigs$Tcell %in% rownames(data)) < 0.7) {
+    if(mean(sigs$Tcell %in% rownames(data)) < 0.25) {
       stop("T cell genes not found")
     }
 
@@ -80,7 +81,7 @@ predictTilState <- function(data,nCores=1,human=F,scoreThreshold=0.5,cellCycleTh
 
     if(sum(!sigGenes %in% rownames(data)) > 10) {
       warning(paste("The following genes were not found in the dataset provided ",paste(sigGenes[!sigGenes %in% rownames(data)],collapse=","),". Doesn't look too bad but prediction performance might be affected."))
-      if(mean(!sigGenes %in% rownames(data)) > 0.1) stop("Too many genes not found")
+      if(mean(!sigGenes %in% rownames(data)) > 0.75) stop("Too many genes not found")
     }
 
 
