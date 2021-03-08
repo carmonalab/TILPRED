@@ -2,6 +2,8 @@
 
 TILPRED is an R Package for the classification of tumor-infiltrating T lymphocytes (TILs) from single-cell RNA-seq data.
 
+**Note:** We recommend to use our newest package [ProjecTILs](https://github.com/carmonalab/ProjecTILs), that enables not only accurate classification of murine and human T cell subtypes/states, but also scRNA-seq data embedding onto curated reference T cell atlases and additional advanced functionalities.
+
 `TILPRED` is a logistic regression-based classifier that reads a [SingleCellExperiment](https://doi.org/doi:10.18129/B9.bioc.SingleCellExperiment) object containing CD8 T cell profiles and assigns to each cell a probability score of belonging to any of the following reference CD8 TIL transcriptomic states: 
 
 * _Exhausted_: a.k.a terminally exhausted cells, associated with terminal differentiation in the context of sustained antigenic stimulation. Phenotypically characterized by co-expression of inhibitory receptors PD-1(_Pdcd1_), TIM3(_Havcr2_), CD39(_Entpd1_), cytotoxic molecules (e.g. _Gzmb_) and lack of Tcf1 (_Tcf7_) expression
@@ -16,8 +18,7 @@ Before computing CD8 T cell states probabilities, `TILPRED` will automatically d
 
 Details on the reference CD8 TIL transcriptomic states and TILPRED construction and benchmarking are available in [Carmona SJ et al. 2020](https://doi.org/10.1080/2162402X.2020.1737369)
 
-NB: Currently, TILPRED classifies CD8 TILs from mouse only. Human functionality is under development. TILPRED using parameter human=T will only classify human cell types from tumor samples into: pure T cells, contaminated T cells, NKs and other cell types (NK, macrophages, CAF, epithelial, endothelial, malignant cells, etc.)
-
+NB: TILPRED classifies CD8 TILs from mouse only. TILPRED using parameter human=T will only discriminate human T cells from non-T cells
 
 ### Package Installation
 
