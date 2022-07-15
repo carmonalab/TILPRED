@@ -8,6 +8,12 @@ Description: Classifies tumor-infiltrating CD8 lymphocytes (TILs) subtypes from 
 License: GPL (version 2 or later)
 Encoding: UTF-8
 LazyData: true
+biocViews:
 Suggests: testthat
-Imports: GenomeInfoDbData,AUCell,BiocManager,SingleCellExperiment,doParallel,doRNG
+Imports: GenomeInfoDbData,
+    AUCell,
+    BiocManager,
+    SingleCellExperiment,
+    doParallel,
+    doRNG
 RoxygenNote: 7.0.2
