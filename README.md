@@ -6,8 +6,8 @@ TILPRED is an R Package for the classification of tumor-infiltrating T lymphocyt
 
 `TILPRED` is a logistic regression-based classifier that reads a [SingleCellExperiment](https://doi.org/doi:10.18129/B9.bioc.SingleCellExperiment) object containing CD8 T cell profiles and assigns to each cell a probability score of belonging to any of the following reference CD8 TIL transcriptomic states: 
 
-* _Exhausted_: a.k.a terminally exhausted cells, associated with terminal differentiation in the context of sustained antigenic stimulation. Phenotypically characterized by co-expression of inhibitory receptors PD-1(_Pdcd1_), TIM3(_Havcr2_), CD39(_Entpd1_), cytotoxic molecules (e.g. _Gzmb_) and lack of Tcf1 (_Tcf7_) expression
-* _MemoryLike_: a.k.a progenitor exhausted cells, also associated to sustained antigenic stimulation but retain capacity to self-renew and give rise to _exhausted_ cells. Phenotypically characterized by co-expression of PD-1 (_Pdcd1_) and Tcf1 (_Tcf7_)
+* _Exhausted_: a.k.a terminally exhausted cells (**Tex**), associated with terminal differentiation in the context of sustained antigenic stimulation. Phenotypically characterized by co-expression of inhibitory receptors (eg PD-1(_Pdcd1_), TIM3(_Havcr2_)), transcription factor _Tox_, cytotoxic molecules (e.g. _Gzmb_) and lack of Tcf1 (_Tcf7_) expression
+* _MemoryLike_: a.k.a progenitor of exhausted cells (**Tpex**), also associated to sustained antigenic stimulation but retain capacity to self-renew and give rise to _exhausted_ cells. Phenotypically characterized by co-expression of _Tox_, PD-1 (_Pdcd1_), and Tcf1 (_Tcf7_)
 * _EffectorMemory_: antigen experienced T cells with effector memory features (e.g. co-expression of cytotoxicity genes such as _Gzmk_ and _Gzmb_, and memory genes such as _Tcf7_, _Lef1_, _Il7r_ and _Ly6c2_). These cells have low to intermediate expression of PD-1, and resemble CD8 T cells found upon acute infection (i.e. in the absence of sustained antigenic stimulation)
 * _Naive_: Naive-like CD8 T cells (high expression of _Tcf7_, _Lef1_, _Il7r_, no expression of cytotoxicity genes or T cell activation markers such as CD44, CD69, etc.)
 
