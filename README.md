@@ -2,7 +2,7 @@
 
 TILPRED is an R Package for the classification of tumor-infiltrating T lymphocytes (TILs) from single-cell RNA-seq data.
 
-**Note:** We recommend to use our newest package [ProjecTILs](https://github.com/carmonalab/ProjecTILs), that enables not only classification of murine and human T cell states, but also embedding of scRNA-seq data into reference single-cell maps for downstream reference-based analyses.
+**TILPRED is no longer maintained.** We recommend to use instead [ProjecTILs](https://github.com/carmonalab/ProjecTILs)
 
 `TILPRED` is a logistic regression-based classifier that reads a [SingleCellExperiment](https://doi.org/doi:10.18129/B9.bioc.SingleCellExperiment) object containing CD8 T cell profiles and assigns to each cell a probability score of belonging to any of the following reference CD8 TIL transcriptomic states: 
 
